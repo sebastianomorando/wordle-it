@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import Keyboard from 'react-simple-keyboard';
+import 'react-simple-keyboard/build/css/index.css';
 import './style.css';
 import { useStore } from './state';
 import { Tile } from './Tile';
@@ -39,6 +41,19 @@ const App = () => {
                     {word.split('').map((letter, col) => <Tile evaluation={state.evaluations[row][col]} key={col}>{letter}</Tile>)}
                 </Row>)}
             </div>
+            <Keyboard layout={{
+                    default: ['q w e r t y u i o p', 'a s d f g h j k l', '{enter} z x c v b n m {backspace}']
+                }}
+                onKeyPress={ (input) => {
+                    if (input === '{enter}') {
+                        dispatch({ type: 'NEXT_ROW' });
+                    } else if (input === '{backspace}') {
+                        dispatch({ type: 'DELETE_LETTER' });
+                    } else {
+                        dispatch({ type: 'ADD_LETTER', letter: input });
+                    }
+                } }
+            />
             <Modal open={state.gameStatus === 'WIN'}>
                 <h3>Complimenti, hai indovinato la parola corretta!</h3>
                 <button onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button>
