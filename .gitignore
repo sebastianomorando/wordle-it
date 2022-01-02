@@ -1,5 +1,5 @@
 .vscode
 .parcel-cache
-dist
+#dist
 *.txt
 node_modules
