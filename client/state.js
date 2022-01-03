@@ -37,7 +37,8 @@ const init = () => ({
     currentRow: 0,
     currentColumn: 0,
     gameStatus: 'IN_PROGRESS',
-    solution: words[Math.random() * words.length | 0]
+    solution: words[Math.random() * words.length | 0],
+    modal: ''
 });
 
 const initialState = init();
@@ -78,6 +79,14 @@ const reducer = (state, action) => {
             }
         }
         
+    }
+
+    if (action.type === 'CLOSE_MODAL') {
+        newState.modal = '';
+    }
+
+    if (action.type === 'OPEN_MODAL') {
+        newState.modal = action.modal;
     }
 
     if (action.type === 'RESET') {

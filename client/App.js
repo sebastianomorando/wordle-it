@@ -36,6 +36,10 @@ const App = () => {
     
     return (
         <>
+            <header>
+                <h1>WORDLE 🇮🇹</h1>
+                <div className='info' onClick={() => { dispatch({ type: 'OPEN_MODAL', modal: 'INFO' }) }}>🛈</div>
+            </header>
             <div className='board' style={{ width: '330px' }}>
                 {state.board.map((word, row) => <Row key={row}>
                     {word.split('').map((letter, col) => <Tile evaluation={state.evaluations[row][col]} key={col}>{letter}</Tile>)}
@@ -61,6 +65,17 @@ const App = () => {
             <Modal open={state.gameStatus === 'FAIL'}>
                 <h3>Non hai indovinato, la parola corretta è {state.solution}</h3>
                 <button onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button>
+            </Modal>
+            <Modal open={state.modal === 'INFO'}>
+                Clone in lingua italiano del gioco Wordle
+                (<a target='blank' href='https://www.powerlanguage.co.uk/wordle/'>https://www.powerlanguage.co.uk/wordle/</a>) 
+                idea originale di <a target='blank' href='https://www.powerlanguage.co.uk/'>https://www.powerlanguage.co.uk/</a>
+                <br />
+                <br />
+                La lista di parole è stata estratta da <a target='blank' href='https://github.com/napolux/paroleitaliane'>https://github.com/napolux/paroleitaliane</a>	
+                <br />
+                <br />
+                <button onClick={() => { dispatch({ type: 'CLOSE_MODAL' }) }}>CHIUDI</button>
             </Modal>
         </>
     );

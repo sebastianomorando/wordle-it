@@ -15,8 +15,33 @@ body {
     flex-direction: column;
     height: 100%;
     box-sizing: border-box;
-    padding: 0.5rem;
+    padding: 0 0.5rem;
     justify-content: space-between;
+    max-width: 460px;
+    margin: 0 auto;
+}
+
+header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+header .info {
+    position: absolute;
+    font-size: 2rem;
+    font-weight: 400;
+    right: 0;
+    top: 0;
+    color: #999;
+    cursor: pointer;
 }
 
 .board {
@@ -97,4 +122,15 @@ body {
     border-radius: 0.5rem;
     padding: 1rem;
     box-sizing: border-box;
+}
+
+.hg-button {
+    text-transform: uppercase;
+    height: 58px !important;
+    border-radius: 4px;
+    background-color: #d3d6da !important;
+}
+
+.simple-keyboard {
+    background-color: transparent !important;
 }
