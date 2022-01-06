@@ -1,6 +1,6 @@
-Italian clone of the game Wordle (https://www.powerlanguage.co.uk/wordle/)
+Italian clone of the game Wordle, made with reactjs (https://www.powerlanguage.co.uk/wordle/)
 
-Clone italiano del gioco Wordle (https://www.powerlanguage.co.uk/wordle/)
+Clone italiano del gioco Wordle, realizzato con reactjs (https://www.powerlanguage.co.uk/wordle/)
 
 Le parole sono state prese da https://github.com/napolux/paroleitaliane
 

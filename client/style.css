@@ -131,6 +131,18 @@ header .info {
     background-color: #d3d6da !important;
 }
 
+.hg-button.used {
+    background-color: #787c7e !important;
+}
+
+.hg-button.present {
+    background-color: #c9b458 !important;
+}
+
+.hg-button.correct {
+    background-color: #6aaa64 !important;
+}
+
 .simple-keyboard {
     background-color: transparent !important;
 }

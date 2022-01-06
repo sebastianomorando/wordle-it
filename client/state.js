@@ -38,7 +38,8 @@ const init = () => ({
     currentColumn: 0,
     gameStatus: 'IN_PROGRESS',
     solution: words[Math.random() * words.length | 0],
-    modal: ''
+    modal: '',
+    usedLetters: new Set()
 });
 
 const initialState = init();
@@ -64,8 +65,10 @@ const reducer = (state, action) => {
     if (action.type === 'NEXT_ROW') {
         if (state.currentRow < state.board.length - 1) {
             newState.evaluations[state.currentRow] = evaluateWord(state.board[state.currentRow], state.solution);
+            state.board[state.currentRow].split('').forEach(letter => newState.usedLetters.add(letter));
             newState.currentRow = state.currentRow + 1;
             newState.currentColumn = 0;
+
             if (newState.evaluations[state.currentRow] === Array(WORD_LENGTH).fill('c').join('')) {
                 newState.gameStatus = 'WIN';
             }

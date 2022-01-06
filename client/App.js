@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
 import './style.css';
@@ -33,6 +33,20 @@ const App = () => {
             document.removeEventListener('keyup', handleKeyDown);
         }
     }, [])
+
+    useLayoutEffect(() => {
+        console.log(state.usedLetters);
+        state.usedLetters.forEach(letter => {
+            const el = document.querySelector(`[data-skbtn="${letter}"]`);
+            el.classList.add('used');
+            if (state.solution.indexOf(letter) > -1) {
+                el.classList.add('present');
+                if (state.evaluations[state.currentRow][state.solution.indexOf(letter)] === 'c') {
+                    el.classList.add('correct');
+                } // TODO: not working
+            }
+        })
+    }, [state.currentRow]);
     
     return (
         <>
