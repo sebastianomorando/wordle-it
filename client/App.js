@@ -7,6 +7,33 @@ import { Tile } from './Tile';
 import { Row } from './Row';
 import Modal from './Modal';
 
+const getKeys = (state) => {
+    const used = new Set();
+    const present = new Set();
+    const correct = new Set();
+
+    for (let i = 0; i < state.board.length; i++) {
+        for (let j = 0; j < state.board[i].length; j++) {
+            const letter = state.board[i][j];
+            if (letter !== ' ') {
+                used.add(letter);
+                if (state.solution.indexOf(letter) > -1) {
+                    present.add(letter);
+                }
+                if (state.solution[j] === letter) {
+                    correct.add(letter);
+                }
+            }
+        }
+    }
+
+    return {
+        used,
+        present,
+        correct
+    }
+}
+
 const App = () => {
 
     const { state, dispatch } = useStore();
@@ -35,17 +62,19 @@ const App = () => {
     }, [])
 
     useLayoutEffect(() => {
-        console.log(state.usedLetters);
-        state.usedLetters.forEach(letter => {
+        const { used, present, correct } = getKeys(state);
+        used.forEach(letter => {
             const el = document.querySelector(`[data-skbtn="${letter}"]`);
             el.classList.add('used');
-            if (state.solution.indexOf(letter) > -1) {
-                el.classList.add('present');
-                if (state.evaluations[state.currentRow][state.solution.indexOf(letter)] === 'c') {
-                    el.classList.add('correct');
-                } // TODO: not working
-            }
-        })
+        });
+        present.forEach(letter => {
+            const el = document.querySelector(`[data-skbtn="${letter}"]`);
+            el.classList.add('present');
+        });
+        correct.forEach(letter => {
+            const el = document.querySelector(`[data-skbtn="${letter}"]`);
+            el.classList.add('correct');
+        });
     }, [state.currentRow]);
     
     return (
