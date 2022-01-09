@@ -1,5 +1,6 @@
 import { useReducer, createContext, useContext } from "react";
 import words from '../server/words.json';
+import possibleWords from '../server/possibleWords.json';
 
 const TRIES = 6;
 const WORD_LENGTH = 5;
@@ -38,7 +39,8 @@ const init = () => ({
     currentColumn: 0,
     gameStatus: 'IN_PROGRESS',
     solution: words[Math.random() * words.length | 0],
-    modal: ''
+    modal: '',
+    gameMode: 'random', // possible values: 'random', 'daily'
 });
 
 const initialState = init();
@@ -62,6 +64,14 @@ const reducer = (state, action) => {
     }
 
     if (action.type === 'NEXT_ROW') {
+        if (state.board[state.currentRow].indexOf(' ') > -1) {
+            alert('Inserisci tutte le lettere della parola per proseuire');
+            return newState;
+        }
+        if (possibleWords.indexOf(state.board[state.currentRow]) === -1) {
+            alert('La parola inserita non è valida');
+            return newState;
+        }
         if (state.currentRow < state.board.length - 1) {
             newState.evaluations[state.currentRow] = evaluateWord(state.board[state.currentRow], state.solution);
             newState.currentRow = state.currentRow + 1;
