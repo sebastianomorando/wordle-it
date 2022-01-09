@@ -12,5 +12,7 @@ rl.on('line', (line) => {
 });
 
 rl.on('close', () => {
+    // shuffle words
+    words.sort(() => Math.random() - 0.5);
     fs.writeFileSync( 'words.json', JSON.stringify(words) );
 })

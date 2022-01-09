@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
 import './style.css';
@@ -63,25 +63,29 @@ const App = () => {
 
     useLayoutEffect(() => {
         const { used, present, correct } = getKeys(state);
-        used.forEach(letter => {
-            const el = document.querySelector(`[data-skbtn="${letter}"]`);
-            el.classList.add('used');
-        });
-        present.forEach(letter => {
-            const el = document.querySelector(`[data-skbtn="${letter}"]`);
-            el.classList.add('present');
-        });
-        correct.forEach(letter => {
-            const el = document.querySelector(`[data-skbtn="${letter}"]`);
-            el.classList.add('correct');
-        });
-    }, [state.currentRow]);
+        console.log(used, present, correct);
+        setTimeout(() => {
+            used.forEach(letter => {
+                const el = document.querySelector(`[data-skbtn="${letter}"]`);
+                el && el.classList.add('used');
+            });
+            present.forEach(letter => {
+                const el = document.querySelector(`[data-skbtn="${letter}"]`);
+                el && el.classList.add('present');
+            });
+            correct.forEach(letter => {
+                const el = document.querySelector(`[data-skbtn="${letter}"]`);
+                el && el.classList.add('correct');
+            });
+        }, 0);
+    }, [state.currentRow, state.gameStatus, state.gameMode]);
     
     return (
         <>
             <header>
                 <h1>WORDLE 🇮🇹</h1>
-                <div className='info' onClick={() => { dispatch({ type: 'OPEN_MODAL', modal: 'INFO' }) }}>🛈</div>
+                <div className='info' onClick={() => { dispatch({ type: 'OPEN_MODAL', modal: 'INFO' }) }}>info</div>
+                <div className='game-mode' onClick={() => { dispatch({ type: 'TOGGLE_GAME_MODE' }) }}>{state.gameMode}</div>
             </header>
             <div className='board' style={{ width: '330px' }}>
                 {state.board.map((word, row) => <Row key={row}>

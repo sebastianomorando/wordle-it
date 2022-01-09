@@ -36,10 +36,20 @@ header h1 {
 
 header .info {
     position: absolute;
-    font-size: 2rem;
+    font-size: 1.3rem;
     font-weight: 400;
     right: 0;
-    top: 0;
+    top: 10px;
+    color: #999;
+    cursor: pointer;
+}
+
+header .game-mode {
+    position: absolute;
+    font-size: 1.3rem;;
+    font-weight: 400;
+    left: 0;
+    top: 10px;
     color: #999;
     cursor: pointer;
 }

@@ -10,6 +10,16 @@ const dayDifference = (date1, date2) => {
     return Math.floor(diff / (1000 * 60 * 60 * 24));
 }
 
+const getSolution = (gameMode) => {
+    // possible gameModes = 'random', 'daily'
+    if (gameMode === 'random') {
+        return words[Math.random() * words.length | 0];
+    }
+    if (gameMode === 'daily') {
+        return words[dayDifference(new Date(2022, 0, 8), new Date())];
+    }
+}
+
 const evaluateWord = (line, word) => {
     let checked = word + ''
     let answer = Array(WORD_LENGTH).fill(' ');
@@ -37,25 +47,46 @@ const evaluateWord = (line, word) => {
     return answer.join('');
 }
 
-const init = () => ({
-    board: Array(TRIES).fill('').map(() => Array(WORD_LENGTH).fill(' ').join('')),
-    evaluations: Array(TRIES).fill('').map(() => Array(WORD_LENGTH).fill(' ').join('')),
-    currentRow: 0,
-    currentColumn: 0,
-    gameStatus: 'IN_PROGRESS',
-    solution: words[Math.random() * words.length | 0],
-    modal: '',
-    gameMode: 'random', // possible values: 'random', 'daily'
-});
+const init = (state) => {
 
-const initialState = init();
+    const gameMode = state && state.gameMode || 'daily';
+    const solution = getSolution(gameMode);
+    console.log(state)
+
+    if (gameMode === 'daily' && state && state.solution === solution) {
+        return state;
+    }
+
+    return {
+        board: Array(TRIES).fill('').map(() => Array(WORD_LENGTH).fill(' ').join('')),
+        evaluations: Array(TRIES).fill('').map(() => Array(WORD_LENGTH).fill(' ').join('')),
+        currentRow: 0,
+        currentColumn: 0,
+        gameStatus: 'IN_PROGRESS',
+        modal: '',
+        solution,
+        gameMode // possible values: 'random', 'daily'
+    };
+};
+
+const getSavedState = () => {
+    try {
+        const state = localStorage.getItem('state');
+        return state ? JSON.parse(state) : null;
+    } catch {
+        return null;
+    }
+}
+
+const initialState = init(getSavedState());
 
 const reducer = (state, action) => {
-    const newState = { ...state };
+    let newState = { ...state };
     // console.log(action);
 
-    if (action.type === 'SET_GAME_MODE') {
-        newState.gameMode = action.payload;
+    if (action.type === 'TOGGLE_GAME_MODE') {
+        // TODO: chiedere all'utente se vuole cambiare il modo di gioco
+        newState = init({ gameMode: state.gameMode === 'random' ? 'daily' : 'random' });
     }
 
     if (action.type === 'ADD_LETTER') {
@@ -98,7 +129,7 @@ const reducer = (state, action) => {
                 newState.gameStatus = 'FAIL';
             }
         }
-        
+        localStorage.setItem('state', JSON.stringify(newState));
     }
 
     if (action.type === 'CLOSE_MODAL') {
@@ -110,7 +141,8 @@ const reducer = (state, action) => {
     }
 
     if (action.type === 'RESET') {
-        return init();
+        localStorage.removeItem('state');
+        newState = init();
     }
 
     // console.log(newState)
