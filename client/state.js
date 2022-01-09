@@ -5,6 +5,11 @@ import possibleWords from '../server/possibleWords.json';
 const TRIES = 6;
 const WORD_LENGTH = 5;
 
+const dayDifference = (date1, date2) => {
+    const diff = date2.getTime() - date1.getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24));
+}
+
 const evaluateWord = (line, word) => {
     let checked = word + ''
     let answer = Array(WORD_LENGTH).fill(' ');
@@ -48,6 +53,10 @@ const initialState = init();
 const reducer = (state, action) => {
     const newState = { ...state };
     // console.log(action);
+
+    if (action.type === 'SET_GAME_MODE') {
+        newState.gameMode = action.payload;
+    }
 
     if (action.type === 'ADD_LETTER') {
         if (state.currentColumn < 5) {

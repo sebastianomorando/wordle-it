@@ -129,6 +129,8 @@ header .info {
     height: 58px !important;
     border-radius: 4px;
     background-color: #d3d6da !important;
+    font-size: 14px;
+    font-weight: 600;
 }
 
 .hg-button.used {
