@@ -6,6 +6,7 @@ import { useStore } from './state';
 import { Tile } from './Tile';
 import { Row } from './Row';
 import Modal from './Modal';
+import { dailyIndex } from './utils';
 
 const getKeys = (state) => {
     const used = new Set();
@@ -32,6 +33,33 @@ const getKeys = (state) => {
         present,
         correct
     }
+}
+
+const evaluationToTile = {
+    'c': '🟩',
+    'p': '🟨',
+    'a': '⬜'
+}
+
+const share = (state) => {
+    let shareText = `Wordle🇮🇹 ${dailyIndex} ${state.currentRow}/${state.board.length} \n\n`;
+    for (let i = 0; i < state.evaluations.length; i++) {
+        const evaluation = state.evaluations[i];
+        if (evaluation === '     ') break;
+        evaluation.split('').forEach((letter) => {
+            shareText += evaluationToTile[letter];
+
+        });
+        shareText += '\n';
+    }
+    // copy to clipboard
+    const el = document.createElement('textarea');
+    el.value = shareText;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    alert('Copiato negli appunti');
 }
 
 const App = () => {
@@ -110,12 +138,23 @@ const App = () => {
                 } }
             />
             <Modal open={state.gameStatus === 'WIN'}>
-                <h3>Complimenti, hai indovinato la parola corretta!</h3>
-                <button onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button>
+                <h3>Complimenti, hai indovinato la parola corretta in {state.currentRow} tentativi!</h3>
+                {state.gameMode === 'random' && <button className='btn' onClick={() => { dispatch({ type: 'RESET' }) }}> GIOCA ANCORA </button> }
+                
+                {state.gameMode === 'daily' &&
+                    <button className='btn' onClick={() => { share(state) }}>
+                        CONDIVIDI
+                    </button>
+                }
             </Modal>
             <Modal open={state.gameStatus === 'FAIL'}>
                 <h3>Non hai indovinato, la parola corretta è {state.solution}</h3>
-                <button onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button>
+                {state.gameMode === 'random' && <button onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button> }
+                {state.gameMode === 'daily' &&
+                    <button className='btn' onClick={() => { share(state) }}>
+                        CONDIVIDI
+                    </button>
+                }
             </Modal>
             <Modal open={state.modal === 'INFO'}>
                 Clone in lingua italiano del gioco Wordle
