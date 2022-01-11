@@ -7,6 +7,7 @@ import { Tile } from './Tile';
 import { Row } from './Row';
 import Modal from './Modal';
 import { dailyIndex } from './utils';
+import Countdown from './Countdown';
 
 const getKeys = (state) => {
     const used = new Set();
@@ -142,9 +143,12 @@ const App = () => {
                 {state.gameMode === 'random' && <button className='btn' onClick={() => { dispatch({ type: 'RESET' }) }}> GIOCA ANCORA </button> }
                 
                 {state.gameMode === 'daily' &&
-                    <button className='btn' onClick={() => { share(state) }}>
-                        CONDIVIDI
-                    </button>
+                    <>
+                        <button className='btn' onClick={() => { share(state) }}>
+                            CONDIVIDI
+                        </button>
+                        <Countdown />
+                    </>
                 }
             </Modal>
             <Modal open={state.gameStatus === 'FAIL'}>

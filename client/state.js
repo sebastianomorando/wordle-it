@@ -1,6 +1,7 @@
 import { useReducer, createContext, useContext } from "react";
 import possibleWords from '../server/possibleWords.json';
 import { getSolution } from "./utils";
+import { updateStats } from "./stats";
 
 const TRIES = 6;
 const WORD_LENGTH = 5;
@@ -104,14 +105,17 @@ const reducer = (state, action) => {
 
             if (newState.evaluations[state.currentRow] === Array(WORD_LENGTH).fill('c').join('')) {
                 newState.gameStatus = 'WIN';
+                updateStats(newState);
             }
         }
         if (state.currentRow === state.board.length - 1) {
             newState.evaluations[state.currentRow] = evaluateWord(state.board[state.currentRow], state.solution);
             if (newState.evaluations[state.currentRow] === Array(WORD_LENGTH).fill('c').join('')) {
                 newState.gameStatus = 'WIN';
+                updateStats(newState);
             } else {
                 newState.gameStatus = 'FAIL';
+                updateStats(newState);
             }
         }
         localStorage.setItem('state', JSON.stringify(newState));
