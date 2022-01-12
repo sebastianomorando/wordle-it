@@ -138,7 +138,7 @@ const App = () => {
                     }
                 } }
             />
-            <Modal open={state.gameStatus === 'WIN'}>
+            <Modal open={state.gameStatus === 'WIN' && state.modal === 'STATS'}>
                 <h3>Complimenti, hai indovinato la parola corretta in {state.currentRow} tentativi!</h3>
                 {state.gameMode === 'random' && <button className='btn' onClick={() => { dispatch({ type: 'RESET' }) }}> GIOCA ANCORA </button> }
                 
@@ -151,7 +151,7 @@ const App = () => {
                     </>
                 }
             </Modal>
-            <Modal open={state.gameStatus === 'FAIL'}>
+            <Modal open={state.gameStatus === 'FAIL'  && state.modal === 'STATS' }>
                 <h3>Non hai indovinato, la parola corretta è {state.solution}</h3>
                 {state.gameMode === 'random' && <button onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button> }
                 {state.gameMode === 'daily' &&
@@ -161,15 +161,20 @@ const App = () => {
                 }
             </Modal>
             <Modal open={state.modal === 'INFO'}>
-                Clone in lingua italiano del gioco Wordle
-                (<a target='blank' href='https://www.powerlanguage.co.uk/wordle/'>https://www.powerlanguage.co.uk/wordle/</a>) 
-                idea originale di <a target='blank' href='https://www.powerlanguage.co.uk/'>https://www.powerlanguage.co.uk/</a>
+                Clone in lingua italiana del gioco&nbsp;
+                <a target='blank' href='https://www.powerlanguage.co.uk/wordle/'>Wordle</a>, nato
+                come esercizio di sviluppo di una applicazione web in React.
+                <br/>
+                <br />
+                Idea originale di <a target='blank' href='https://www.powerlanguage.co.uk/'>Josh Wardle (Powerlanguage)</a>
                 <br />
                 <br />
                 La lista di parole è stata estratta da <a target='blank' href='https://github.com/napolux/paroleitaliane'>https://github.com/napolux/paroleitaliane</a>	
                 <br />
                 <br />
-                <button onClick={() => { dispatch({ type: 'CLOSE_MODAL' }) }}>CHIUDI</button>
+                Feedback:&nbsp;
+                <a target='blank' href='https://github.com/sebastianomorando/wordle-it'>Github (codice sorgente)</a> |&nbsp;
+                <a target='blank' href='https://twitter.com/dettofernet'>Twitter</a>
             </Modal>
         </>
     );

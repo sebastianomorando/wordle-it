@@ -131,7 +131,23 @@ header .game-mode {
     background-color: #fff;
     border-radius: 0.5rem;
     padding: 1rem;
+    padding-top: 3rem;
     box-sizing: border-box;
+}
+
+.close-modal {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.INFO-modal {
+    font-size: 1.2rem;
 }
 
 .hg-button {

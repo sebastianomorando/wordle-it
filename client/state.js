@@ -37,9 +37,11 @@ const init = (state) => {
 
     const gameMode = state && state.gameMode || 'daily';
     const solution = getSolution(gameMode);
-    console.log(state)
 
     if (gameMode === 'daily' && state && state.solution === solution) {
+        if (state.gameStatus !== 'IN_PROGRESS') {
+            state.modal = 'STATS';
+        }
         return state;
     }
 
@@ -105,6 +107,7 @@ const reducer = (state, action) => {
 
             if (newState.evaluations[state.currentRow] === Array(WORD_LENGTH).fill('c').join('')) {
                 newState.gameStatus = 'WIN';
+                newState.modal = 'STATS';
                 updateStats(newState);
             }
         }
@@ -112,9 +115,11 @@ const reducer = (state, action) => {
             newState.evaluations[state.currentRow] = evaluateWord(state.board[state.currentRow], state.solution);
             if (newState.evaluations[state.currentRow] === Array(WORD_LENGTH).fill('c').join('')) {
                 newState.gameStatus = 'WIN';
+                newState.modal = 'STATS';
                 updateStats(newState);
             } else {
                 newState.gameStatus = 'FAIL';
+                newState.modal = 'STATS';
                 updateStats(newState);
             }
         }
