@@ -34,15 +34,16 @@ const evaluateWord = (line, word) => {
 }
 
 const init = (state) => {
+    const savedState = getSavedState();
 
     const gameMode = state && state.gameMode || 'daily';
     const solution = getSolution(gameMode);
 
-    if (gameMode === 'daily' && state && state.solution === solution) {
-        if (state.gameStatus !== 'IN_PROGRESS') {
-            state.modal = 'STATS';
+    if (gameMode === 'daily' && savedState && savedState.solution === solution) {
+        if (savedState.gameStatus !== 'IN_PROGRESS') {
+            savedState.modal = 'STATS';
         }
-        return state;
+        return savedState;
     }
 
     return {
@@ -66,7 +67,7 @@ const getSavedState = () => {
     }
 }
 
-const initialState = init(getSavedState());
+const initialState = init();
 
 const reducer = (state, action) => {
     let newState = { ...state };
@@ -108,22 +109,23 @@ const reducer = (state, action) => {
             if (newState.evaluations[state.currentRow] === Array(WORD_LENGTH).fill('c').join('')) {
                 newState.gameStatus = 'WIN';
                 newState.modal = 'STATS';
-                updateStats(newState);
+                if (state.gameMode === 'daily') updateStats(newState);
             }
         }
         if (state.currentRow === state.board.length - 1) {
             newState.evaluations[state.currentRow] = evaluateWord(state.board[state.currentRow], state.solution);
+            newState.currentRow = state.currentRow + 1;
             if (newState.evaluations[state.currentRow] === Array(WORD_LENGTH).fill('c').join('')) {
                 newState.gameStatus = 'WIN';
                 newState.modal = 'STATS';
-                updateStats(newState);
+                if (state.gameMode === 'daily') updateStats(newState);
             } else {
                 newState.gameStatus = 'FAIL';
                 newState.modal = 'STATS';
-                updateStats(newState);
+                if (state.gameMode === 'daily') updateStats(newState);
             }
         }
-        localStorage.setItem('state', JSON.stringify(newState));
+        if (state.gameMode === 'daily') localStorage.setItem('state', JSON.stringify(newState));
     }
 
     if (action.type === 'CLOSE_MODAL') {
@@ -135,8 +137,7 @@ const reducer = (state, action) => {
     }
 
     if (action.type === 'RESET') {
-        localStorage.removeItem('state');
-        newState = init();
+        newState = init({ gameMode: 'random' });
     }
 
     // console.log(newState)

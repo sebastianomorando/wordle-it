@@ -44,6 +44,9 @@ const evaluationToTile = {
 
 const share = (state) => {
     let shareText = `Wordle🇮🇹 ${dailyIndex} ${state.currentRow}/${state.board.length} \n\n`;
+    if (state.gameStatus === 'FAIL') {
+        shareText = `Wordle🇮🇹 ${dailyIndex} X/${state.board.length} \n\n`;
+    }
     for (let i = 0; i < state.evaluations.length; i++) {
         const evaluation = state.evaluations[i];
         if (evaluation === '     ') break;
@@ -94,6 +97,9 @@ const App = () => {
         const { used, present, correct } = getKeys(state);
         console.log(used, present, correct);
         setTimeout(() => {
+            document.querySelectorAll('[data-skbtn]').forEach((el) => {
+                el.classList.remove('used', 'present', 'correct');
+            });
             used.forEach(letter => {
                 const el = document.querySelector(`[data-skbtn="${letter}"]`);
                 el && el.classList.add('used');
@@ -125,7 +131,7 @@ const App = () => {
                     default: ['q w e r t y u i o p', 'a s d f g h j k l', '{enter} z x c v b n m {backspace}']
                 }}
                 display={{
-                    '{enter}': 'Enter',
+                    '{enter}': 'Invio',
                     '{backspace}': '⌫'
                 }}
                 onKeyPress={ (input) => {
@@ -152,15 +158,21 @@ const App = () => {
                 }
             </Modal>
             <Modal open={state.gameStatus === 'FAIL'  && state.modal === 'STATS' }>
-                <h3>Non hai indovinato, la parola corretta è {state.solution}</h3>
-                {state.gameMode === 'random' && <button onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button> }
+                <h3>Non hai indovinato, la parola corretta è "{state.solution.toUpperCase()}"</h3>
+                {state.gameMode === 'random' && <button className='btn' onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button> }
                 {state.gameMode === 'daily' &&
-                    <button className='btn' onClick={() => { share(state) }}>
-                        CONDIVIDI
-                    </button>
+                    <>
+                        <button className='btn' onClick={() => { share(state) }}>
+                            CONDIVIDI
+                        </button>
+                        <Countdown />
+                    </>
                 }
             </Modal>
             <Modal open={state.modal === 'INFO'}>
+                Indovina la parola in 6 tentativi.<br /><br />
+                Ogni tentativo deve essere una parola valida di 5 lettere, premi invio per passare alla parola successiva.
+                <br /><br />
                 Clone in lingua italiana del gioco&nbsp;
                 <a target='blank' href='https://www.powerlanguage.co.uk/wordle/'>Wordle</a>, nato
                 come esercizio di sviluppo di una applicazione web in React.

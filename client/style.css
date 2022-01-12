@@ -127,11 +127,9 @@ header .game-mode {
     transform: translate(-50%, -50%);
     width: 30rem;
     max-width: calc(100% - 2rem);
-    height: 20rem;
     background-color: #fff;
     border-radius: 0.5rem;
-    padding: 1rem;
-    padding-top: 3rem;
+    padding: 3rem 1rem 2rem;
     box-sizing: border-box;
 }
 
@@ -147,7 +145,7 @@ header .game-mode {
 }
 
 .INFO-modal {
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .hg-button {
