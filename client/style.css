@@ -1,5 +1,17 @@
+:root {
+    --background-color: white;
+    --text-color: black;
+    --light-color: #f5f5f5;
+    --modal-overlay: rgba(0, 0, 0, 0.5);
+    --absent-color: #787c7e;
+    --present-color: #c9b458;
+    --correct-color: #6aaa64;
+    --key-color: #d3d6da;
+    --tile-border: 2px solid #d3d6da;
+}
+
 html {
-height: 100%;
+    height: 100%;
 }
 
 body {
@@ -8,6 +20,19 @@ body {
     margin: 0;
     padding: 0;
     border: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+body.nightmode {
+    --background-color: black;
+    --text-color: rgb(190, 190, 190);
+    --modal-overlay: rgba(100, 100, 100, 0.7);
+    --absent-color: #3a3a3c;
+    --correct-color: #538d4e;
+    --present-color: #b59f3b;
+    --key-color: #818384;
+    --tile-border: 2px solid #3a3a3c;
 }
 
 #app {
@@ -71,7 +96,7 @@ header .game-mode {
 }
 
 .tile {
-    border: 2px solid #d3d6da;
+    border: var(--tile-border);
     width: 100%;
     font-size: 2rem;
     line-height: 2rem;
@@ -100,7 +125,7 @@ header .game-mode {
 
 .tile.absent {
     border: 0;
-    background-color: #787c7e;
+    background-color: var(--absent-color);
     color: #FFF;
 }
 
@@ -116,7 +141,7 @@ header .game-mode {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--modal-overlay);
     z-index: 10;
 }
 
@@ -127,7 +152,7 @@ header .game-mode {
     transform: translate(-50%, -50%);
     width: 30rem;
     max-width: calc(100% - 2rem);
-    background-color: #fff;
+    background-color: var(--background-color);
     border-radius: 0.5rem;
     padding: 3rem 1rem 2rem;
     box-sizing: border-box;
@@ -142,6 +167,7 @@ header .game-mode {
     border: 0;
     background-color: transparent;
     cursor: pointer;
+    color: var(--text-color);
 }
 
 .INFO-modal {
@@ -152,21 +178,21 @@ header .game-mode {
     text-transform: uppercase;
     height: 58px !important;
     border-radius: 4px;
-    background-color: #d3d6da !important;
+    background-color: var(--key-color) !important;
     font-size: 14px;
     font-weight: 600;
 }
 
 .hg-button.used {
-    background-color: #787c7e !important;
+    background-color: var(--absent-color) !important;
 }
 
 .hg-button.present {
-    background-color: #c9b458 !important;
+    background-color: var(--present-color) !important;
 }
 
 .hg-button.correct {
-    background-color: #6aaa64 !important;
+    background-color: var(--correct-color) !important;
 }
 
 .simple-keyboard {
@@ -193,4 +219,54 @@ header .game-mode {
     color: #000;
     text-align: center;
     margin-bottom: 1rem;
+}
+
+.menu-voice {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid gray;
+    margin-bottom: 1rem;
+}
+
+.menu-voice h4 {
+    margin: 0;
+}
+
+.switch {
+    width: 2.4rem;
+    background: var(--correct-color);
+    height: 1.2rem;
+    border-radius: 0.6rem;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.switch-container > input[type=checkbox] {
+    display: none;
+}
+
+.switch-container > input[type=checkbox] + .switch {
+    background-color:rgba(100, 100, 100, 0.7);
+}
+
+.switch-container > input[type=checkbox] + .switch span {
+    display: block;
+    position: absolute;
+    height: 0.8rem;
+    width: 0.8rem;
+    background-color: white;
+    top: 0.2rem;
+    left: 0.2rem;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.switch-container > input[type=checkbox]:checked + .switch {
+    background-color: var(--correct-color);
+}
+
+.switch-container > input[type=checkbox]:checked + .switch span {
+    transform: translateX(1.2rem);
 }

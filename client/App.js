@@ -8,6 +8,7 @@ import { Row } from './Row';
 import Modal from './Modal';
 import { dailyIndex } from './utils';
 import Countdown from './Countdown';
+import { Nightmode } from './Nightmode';
 
 const getKeys = (state) => {
     const used = new Set();
@@ -118,7 +119,7 @@ const App = () => {
     return (
         <>
             <header>
-                <h1>WORDLE 🇮🇹</h1>
+                <h1>VERBA</h1>
                 <div className='info' onClick={() => { dispatch({ type: 'OPEN_MODAL', modal: 'INFO' }) }}>info</div>
                 <div className='game-mode' onClick={() => { dispatch({ type: 'TOGGLE_GAME_MODE' }) }}>{state.gameMode}</div>
             </header>
@@ -128,7 +129,7 @@ const App = () => {
                 </Row>)}
             </div>
             <Keyboard layout={{
-                    default: ['q w e r t y u i o p', 'a s d f g h j k l', '{enter} z x c v b n m {backspace}']
+                    default: ['q e è r t u i o p', 'a à s d f g h j l', '{enter} z x c v b n m {backspace}']
                 }}
                 display={{
                     '{enter}': 'Invio',
@@ -170,6 +171,9 @@ const App = () => {
                 }
             </Modal>
             <Modal open={state.modal === 'INFO'}>
+                
+                <Nightmode />
+               
                 Indovina la parola in 6 tentativi.<br /><br />
                 Ogni tentativo deve essere una parola valida di 5 lettere, premi invio per passare alla parola successiva.
                 <br /><br />

@@ -35,6 +35,9 @@ possibleWords.forEach( (word) => {
     if (word.indexOf("y") !== -1) {
         console.log(word);
     }
+    if (word.indexOf("k") !== -1) {
+        console.log(word);
+    }
 });
 
 console.log(characters, characters.size);

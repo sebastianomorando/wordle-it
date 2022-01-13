@@ -8,9 +8,18 @@ const rl = readline.createInterface({
 const words = [];
 
 rl.on('line', (line) => {
-    line.length === 5 && words.push(line);
+    let word = line.replace("e'", 'è');
+    word = word.replace("a'", "à");
+    if (word.length === 5) {
+        words.push(word);
+    }
 });
 
 rl.on('close', () => {
+    words.push('città');
+    words.push('assai');
+    words.push('gatto');
+    words.push('pietà');
+    words.push('caffè');
     fs.writeFileSync( 'possibleWords.json', JSON.stringify(words) );
 })
