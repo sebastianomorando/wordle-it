@@ -23,8 +23,11 @@
     <body>
         <script>
             if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.body.classList.add('nightmode')
-                localStorage.setItem('darkmode', 'true')
+                var nightmode = localStorage.getItem('nightmode')
+                if (nightmode == null) {
+                    localStorage.setItem('nightmode', 'true')
+                    document.body.classList.add('nightmode')
+                }
             }
             
             if (localStorage.getItem('nightmode') === 'true') {
