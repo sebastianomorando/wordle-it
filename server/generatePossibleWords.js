@@ -21,5 +21,6 @@ rl.on('close', () => {
     words.push('gatto');
     words.push('pietà');
     words.push('caffè');
+    words.push('cesto');
     fs.writeFileSync( 'possibleWords.json', JSON.stringify(words) );
 })

@@ -44,9 +44,9 @@ const evaluationToTile = {
 }
 
 const share = (state) => {
-    let shareText = `Wordle🇮🇹 ${dailyIndex} ${state.currentRow}/${state.board.length} \n\n`;
+    let shareText = `VERBA ${dailyIndex} ${state.currentRow}/${state.board.length} \n\n`;
     if (state.gameStatus === 'FAIL') {
-        shareText = `Wordle🇮🇹 ${dailyIndex} X/${state.board.length} \n\n`;
+        shareText = `VERBA ${dailyIndex} X/${state.board.length} \n\n`;
     }
     for (let i = 0; i < state.evaluations.length; i++) {
         const evaluation = state.evaluations[i];
@@ -123,7 +123,7 @@ const App = () => {
                 <div className='info' onClick={() => { dispatch({ type: 'OPEN_MODAL', modal: 'INFO' }) }}>info</div>
                 <div className='game-mode' onClick={() => { dispatch({ type: 'TOGGLE_GAME_MODE' }) }}>{state.gameMode}</div>
             </header>
-            <div className='board' style={{ width: '330px' }}>
+            <div className='board'>
                 {state.board.map((word, row) => <Row key={row}>
                     {word.split('').map((letter, col) => <Tile evaluation={state.evaluations[row][col]} key={col}>{letter}</Tile>)}
                 </Row>)}

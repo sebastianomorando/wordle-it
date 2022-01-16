@@ -51,12 +51,17 @@ header {
     position: relative;
 }
 
+.nightmode header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 header h1 {
     font-size: 2rem;
     font-weight: 600;
     margin: 0;
     padding: 0;
     text-align: center;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 header .info {
@@ -85,8 +90,15 @@ header .game-mode {
     grid-gap: 5px;
     padding: 10px;
     box-sizing: border-box;
-    max-width: 100%;
+    max-width: 330px;
+    width: 100%;
     margin: auto;
+}
+
+@media screen and (max-height: 630px) {
+    .board {
+       width: 45vh;
+    }
 }
 
 .row {
@@ -109,6 +121,7 @@ header .game-mode {
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 .tile::before {
@@ -119,7 +132,7 @@ header .game-mode {
 
 .tile.present {
     border: 0;
-    background-color: #c9b458;
+    background-color: var(--present-color);
     color: #FFF;
 }
 
@@ -131,7 +144,7 @@ header .game-mode {
 
 .tile.correct {
     border: 0;
-    background-color: #6aaa64;
+    background-color: var(--correct-color);
     color: #FFF;
 }
 
@@ -181,6 +194,8 @@ header .game-mode {
     background-color: var(--key-color) !important;
     font-size: 14px;
     font-weight: 600;
+    box-shadow: none !important;
+    border-bottom: 0 !important;
 }
 
 .hg-button.used {
@@ -193,6 +208,10 @@ header .game-mode {
 
 .hg-button.correct {
     background-color: var(--correct-color) !important;
+}
+
+.hg-button.hg-button-backspace {
+    font-size: 1.3rem;
 }
 
 .simple-keyboard {
@@ -216,7 +235,7 @@ header .game-mode {
 .countdown {
     font-size: 1.5rem;
     font-weight: 600;
-    color: #000;
+    color: var(--text-color);
     text-align: center;
     margin-bottom: 1rem;
 }
