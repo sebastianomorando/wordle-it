@@ -9,6 +9,9 @@ import Modal from './Modal';
 import { dailyIndex } from './utils';
 import Countdown from './Countdown';
 import { Nightmode } from './Nightmode';
+import Cog from './icons/Cog';
+import QuestionMark from './icons/QuestionMark';
+import StatContainer from './StatContainer';
 
 const getKeys = (state) => {
     const used = new Set();
@@ -120,7 +123,7 @@ const App = () => {
         <>
             <header>
                 <h1>VERBA</h1>
-                <div className='info' onClick={() => { dispatch({ type: 'OPEN_MODAL', modal: 'INFO' }) }}>info</div>
+                <div className='info' onClick={() => { dispatch({ type: 'OPEN_MODAL', modal: 'INFO' }) }}><QuestionMark /></div>
                 <div className='game-mode' onClick={() => { dispatch({ type: 'TOGGLE_GAME_MODE' }) }}>{state.gameMode}</div>
             </header>
             <div className='board'>
@@ -147,6 +150,7 @@ const App = () => {
             />
             <Modal open={state.gameStatus === 'WIN' && state.modal === 'STATS'}>
                 <h3>Complimenti, hai indovinato la parola corretta in {state.currentRow} tentativi!</h3>
+                <StatContainer />
                 {state.gameMode === 'random' && <button className='btn' onClick={() => { dispatch({ type: 'RESET' }) }}> GIOCA ANCORA </button> }
                 
                 {state.gameMode === 'daily' &&
@@ -160,6 +164,7 @@ const App = () => {
             </Modal>
             <Modal open={state.gameStatus === 'FAIL'  && state.modal === 'STATS' }>
                 <h3>Non hai indovinato, la parola corretta è "{state.solution.toUpperCase()}"</h3>
+                <StatContainer />
                 {state.gameMode === 'random' && <button className='btn' onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button> }
                 {state.gameMode === 'daily' &&
                     <>
@@ -179,7 +184,9 @@ const App = () => {
                 <br /><br />
                 Clone in lingua italiana del gioco&nbsp;
                 <a target='blank' href='https://www.powerlanguage.co.uk/wordle/'>Wordle</a>, nato
-                come esercizio di sviluppo di una applicazione web in React.
+                come esercizio di sviluppo di una applicazione web in React.<br/><br/>
+                Il progetto è un work in progress continuo e fatto per la maggior parte in live, 
+                che potete seguire sul mio canale <a target='blank' href='https://www.twitch.tv/mastornadettofernet>'>Twitch</a>
                 <br/>
                 <br />
                 Idea originale di <a target='blank' href='https://www.powerlanguage.co.uk/'>Josh Wardle (Powerlanguage)</a>

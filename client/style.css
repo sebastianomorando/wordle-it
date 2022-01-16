@@ -74,6 +74,11 @@ header .info {
     cursor: pointer;
 }
 
+header .info svg {
+    width: 1.3rem;
+    height: 1.3rem;
+}
+
 header .game-mode {
     position: absolute;
     font-size: 1.3rem;;
@@ -288,4 +293,32 @@ header .game-mode {
 
 .switch-container > input[type=checkbox]:checked + .switch span {
     transform: translateX(1.2rem);
+}
+
+.stats-title {
+    text-align: center;
+    color: var(--text-color);
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.stat-row {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+}
+
+.stat-item {
+    margin: 0.3rem;
+    width: 3.5rem;
+}
+
+.stat-value {
+    text-align: center;
+    font-size: 2.2rem;
+}
+
+.stat-item-label {
+    font-size: 0.8rem;
+    text-align: center;
 }

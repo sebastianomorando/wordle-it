@@ -19,7 +19,7 @@
 
 */
 
-const getStats = () => {
+export const getStats = () => {
     const initialStats = {
         "currentStreak": 0,
         "maxStreak": 0,
@@ -59,6 +59,8 @@ export const updateStats = (state) => {
     }
     if (state.gameStatus === 'FAIL') {
         stats.guesses.fail++;
+        stats.currentStreak = 0;
     }
+    stats.winPercentage = Math.round(stats.gamesWon / stats.gamesPlayed * 100);
     localStorage.setItem('stats', JSON.stringify(stats));
 }
