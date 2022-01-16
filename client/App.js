@@ -186,7 +186,7 @@ const App = () => {
                 <a target='blank' href='https://www.powerlanguage.co.uk/wordle/'>Wordle</a>, nato
                 come esercizio di sviluppo di una applicazione web in React.<br/><br/>
                 Il progetto è un work in progress continuo e fatto per la maggior parte in live, 
-                che potete seguire sul mio canale <a target='blank' href='https://www.twitch.tv/mastornadettofernet>'>Twitch</a>
+                che potete seguire sul mio canale <a target='blank' href='https://www.twitch.tv/mastornadettofernet'>Twitch</a>
                 <br/>
                 <br />
                 Idea originale di <a target='blank' href='https://www.powerlanguage.co.uk/'>Josh Wardle (Powerlanguage)</a>
