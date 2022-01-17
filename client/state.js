@@ -93,12 +93,17 @@ const reducer = (state, action) => {
     }
 
     if (action.type === 'NEXT_ROW') {
+        if (state.board[state.currentRow] === 'macio') {
+            Snackbar.alert('E se poi te ne penti!!???!');
+            return newState;
+        }
+
         if (state.board[state.currentRow].indexOf(' ') > -1) {
-            alert('Inserisci tutte le lettere della parola per proseuire');
+            Snackbar.alert('Inserisci tutte le lettere della parola per proseguire');
             return newState;
         }
         if (possibleWords.indexOf(state.board[state.currentRow]) === -1) {
-            alert('La parola inserita non è valida');
+            Snackbar.alert('La parola inserita non è nella lista delle parole possibili');
             return newState;
         }
         if (state.currentRow < state.board.length - 1) {

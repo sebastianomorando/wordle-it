@@ -322,3 +322,68 @@ header .game-mode {
     font-size: 0.8rem;
     text-align: center;
 }
+
+.stat-guesses {
+    max-width: 280px;
+    margin: 1rem auto;
+}
+
+.stat-guesses-title {
+    text-align: center;
+    color: var(--text-color);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+
+.stat-guesses-row {
+    display: flex;
+    font-size: 0.8rem;
+    margin: 0.2rem 0;
+}
+
+.stat-guesses-label {
+    padding: 0.2rem;
+}
+
+.stat-guesses-value {
+    margin-left: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 0.2rem;
+    padding-right: 0.6rem;
+    text-align: right;
+    font-weight: bold;
+}
+
+.nightmode .stat-guesses-value {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.stat-guesses-value.green {
+    background-color: var(--correct-color);
+}
+
+.btn.share {
+    background-color: var(--correct-color);
+}
+
+.snackbar {
+    position: fixed;
+    top: 5rem;
+    width: fit-content;
+    background-color: var(--text-color);
+    color: var(--background-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    transform: translateX(-50%);
+    left: 50%;
+    font-weight: bold;
+    z-index: 11;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.6s;
+}
+
+.snackbar.show {
+    opacity: 1;
+    transition: opacity 0.2s;
+}

@@ -12,6 +12,7 @@ import { Nightmode } from './Nightmode';
 import Cog from './icons/Cog';
 import QuestionMark from './icons/QuestionMark';
 import StatContainer from './StatContainer';
+import StatGuesses from './StatGuesses';
 
 const getKeys = (state) => {
     const used = new Set();
@@ -67,7 +68,7 @@ const share = (state) => {
     el.select();
     document.execCommand('copy');
     document.body.removeChild(el);
-    alert('Copiato negli appunti');
+    Snackbar.alert('Copiato negli appunti');
 }
 
 const App = () => {
@@ -151,11 +152,12 @@ const App = () => {
             <Modal open={state.gameStatus === 'WIN' && state.modal === 'STATS'}>
                 <h3>Complimenti, hai indovinato la parola corretta in {state.currentRow} tentativi!</h3>
                 <StatContainer />
+                <StatGuesses />
                 {state.gameMode === 'random' && <button className='btn' onClick={() => { dispatch({ type: 'RESET' }) }}> GIOCA ANCORA </button> }
                 
                 {state.gameMode === 'daily' &&
                     <>
-                        <button className='btn' onClick={() => { share(state) }}>
+                        <button className='btn share' onClick={() => { share(state) }}>
                             CONDIVIDI
                         </button>
                         <Countdown />
@@ -165,10 +167,11 @@ const App = () => {
             <Modal open={state.gameStatus === 'FAIL'  && state.modal === 'STATS' }>
                 <h3>Non hai indovinato, la parola corretta è "{state.solution.toUpperCase()}"</h3>
                 <StatContainer />
+                <StatGuesses />
                 {state.gameMode === 'random' && <button className='btn' onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button> }
                 {state.gameMode === 'daily' &&
                     <>
-                        <button className='btn' onClick={() => { share(state) }}>
+                        <button className='btn share' onClick={() => { share(state) }}>
                             CONDIVIDI
                         </button>
                         <Countdown />
