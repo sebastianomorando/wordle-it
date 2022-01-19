@@ -79,6 +79,9 @@ const reducer = (state, action) => {
     }
 
     if (action.type === 'ADD_LETTER') {
+        if (state.gameStatus !== 'IN_PROGRESS') {
+            return newState;
+        }
         if (state.currentColumn < 5) {
             newState.board[state.currentRow] = state.board[state.currentRow].substr(0, state.currentColumn) + action.letter + state.board[state.currentRow].substr(state.currentColumn + 1);
             newState.currentColumn = state.currentColumn + 1;
@@ -86,6 +89,9 @@ const reducer = (state, action) => {
     }
 
     if (action.type === 'DELETE_LETTER') {
+        if (state.gameStatus !== 'IN_PROGRESS') {
+            return newState;
+        }
         if (state.currentColumn > 0) {
             newState.board[state.currentRow] = state.board[state.currentRow].substr(0, state.currentColumn - 1)+ ' ' + state.board[state.currentRow].substr(state.currentColumn);
             newState.currentColumn = state.currentColumn - 1;
@@ -93,6 +99,11 @@ const reducer = (state, action) => {
     }
 
     if (action.type === 'NEXT_ROW') {
+        console.log(state.gameStatus)
+        if (state.gameStatus !== 'IN_PROGRESS') {
+            return newState;
+        }
+
         if (state.board[state.currentRow] === 'macio') {
             Snackbar.alert('E se poi te ne penti!!???!');
             return newState;
