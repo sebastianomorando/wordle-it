@@ -129,7 +129,15 @@ const App = () => {
             </header>
             <div className='board'>
                 {state.board.map((word, row) => <Row key={row}>
-                    {word.split('').map((letter, col) => <Tile evaluation={state.evaluations[row][col]} key={col}>{letter}</Tile>)}
+                    {word.split('').map((letter, col) =>
+                        <Tile 
+                            evaluation={state.evaluations[row][col]}
+                            key={col}
+                            index={col}
+                            >
+                                {letter}
+                        </Tile>
+                    )}
                 </Row>)}
             </div>
             <Keyboard layout={{
