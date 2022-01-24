@@ -10,6 +10,7 @@ import { dailyIndex } from './utils';
 import Countdown from './Countdown';
 import { Nightmode } from './Nightmode';
 import Cog from './icons/Cog';
+import Chart from './icons/Chart';
 import QuestionMark from './icons/QuestionMark';
 import StatContainer from './StatContainer';
 import StatGuesses from './StatGuesses';
@@ -124,11 +125,27 @@ const App = () => {
         <>
             <header>
                 <h1>VERBA</h1>
-                <div className='info' onClick={() => { dispatch({ type: 'OPEN_MODAL', modal: 'INFO' }) }}><QuestionMark /></div>
+                <div className='info'>
+                    
+                    <button
+                        className="icon-button"
+                        onClick={() => { dispatch({ type: 'OPEN_MODAL', modal: 'STATS' }) } }
+                    >
+                        <Chart />
+                    </button>
+                    <button
+                        className="icon-button"
+                        onClick={() => { dispatch({ type: 'OPEN_MODAL', modal: 'INFO' }) } }
+                    >
+                        <QuestionMark />   
+                    </button>
+                    
+
+                </div>
                 <div className='game-mode' onClick={() => { dispatch({ type: 'TOGGLE_GAME_MODE' }) }}>{state.gameMode}</div>
             </header>
             <div className='board'>
-                {state.board.map((word, row) => <Row key={row}>
+                {state.board.map((word, row) => <Row key={row} index={row}>
                     {word.split('').map((letter, col) =>
                         <Tile 
                             evaluation={state.evaluations[row][col]}
@@ -157,27 +174,15 @@ const App = () => {
                     }
                 } }
             />
-            <Modal open={state.gameStatus === 'WIN' && state.modal === 'STATS'}>
-                <h3>Complimenti, hai indovinato la parola corretta in {state.currentRow} tentativi!</h3>
+            <Modal open={state.modal === 'STATS'}>
+                {state.gameStatus === 'WIN' && <h3>Complimenti, hai indovinato la parola corretta in {state.currentRow} tentativi!</h3>}
+                {state.gameStatus === 'FAIL' && <h3>Non hai indovinato, la parola corretta è "{state.solution.toUpperCase()}"</h3>}
+                
                 <StatContainer />
                 <StatGuesses />
                 {state.gameMode === 'random' && <button className='btn' onClick={() => { dispatch({ type: 'RESET' }) }}> GIOCA ANCORA </button> }
                 
-                {state.gameMode === 'daily' &&
-                    <>
-                        <button className='btn share' onClick={() => { share(state) }}>
-                            CONDIVIDI
-                        </button>
-                        <Countdown />
-                    </>
-                }
-            </Modal>
-            <Modal open={state.gameStatus === 'FAIL'  && state.modal === 'STATS' }>
-                <h3>Non hai indovinato, la parola corretta è "{state.solution.toUpperCase()}"</h3>
-                <StatContainer />
-                <StatGuesses />
-                {state.gameMode === 'random' && <button className='btn' onClick={() => { dispatch({ type: 'RESET' }) }}>GIOCA ANCORA</button> }
-                {state.gameMode === 'daily' &&
+                {state.gameMode === 'daily' && state.gameStatus !== 'IN_PROGRESS' &&
                     <>
                         <button className='btn share' onClick={() => { share(state) }}>
                             CONDIVIDI

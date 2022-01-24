@@ -42,6 +42,7 @@ const init = (state) => {
     if (gameMode === 'daily' && savedState && savedState.solution === solution) {
         if (savedState.gameStatus !== 'IN_PROGRESS') {
             savedState.modal = 'STATS';
+            savedState.error = '';
         }
         return savedState;
     }
@@ -54,6 +55,7 @@ const init = (state) => {
         gameStatus: 'IN_PROGRESS',
         modal: '',
         solution,
+        error: '',
         gameMode // possible values: 'random', 'daily'
     };
 };
@@ -72,6 +74,11 @@ const initialState = init();
 const reducer = (state, action) => {
     let newState = { ...state };
     // console.log(action);
+
+    if (action.type === 'CLEAR_ERROR') {
+        newState.error = '';
+        return newState;
+    }
 
     if (action.type === 'TOGGLE_GAME_MODE') {
         // TODO: chiedere all'utente se vuole cambiare il modo di gioco
@@ -99,24 +106,28 @@ const reducer = (state, action) => {
     }
 
     if (action.type === 'NEXT_ROW') {
-        console.log(state.gameStatus)
         if (state.gameStatus !== 'IN_PROGRESS') {
             return newState;
         }
 
         if (state.board[state.currentRow] === 'macio') {
             Snackbar.alert('E se poi te ne penti!!???!');
+            newState.error = 'row';
             return newState;
         }
 
         if (state.board[state.currentRow].indexOf(' ') > -1) {
             Snackbar.alert('Inserisci tutte le lettere della parola per proseguire');
+            newState.error = 'row';
             return newState;
         }
+
         if (possibleWords.indexOf(state.board[state.currentRow]) === -1) {
             Snackbar.alert('La parola inserita non è nella lista delle parole possibili');
+            newState.error = 'row';
             return newState;
         }
+
         if (state.currentRow < state.board.length - 1) {
             newState.evaluations[state.currentRow] = evaluateWord(state.board[state.currentRow], state.solution);
             newState.currentRow = state.currentRow + 1;
