@@ -22781,7 +22781,10 @@ const init = (state)=>{
     const gameMode = state && state.gameMode || 'daily';
     const solution = _utils.getSolution(gameMode);
     if (gameMode === 'daily' && savedState && savedState.solution === solution) {
-        if (savedState.gameStatus !== 'IN_PROGRESS') savedState.modal = 'STATS';
+        if (savedState.gameStatus !== 'IN_PROGRESS') {
+            savedState.modal = 'STATS';
+            savedState.error = '';
+        }
         return savedState;
     }
     return {
@@ -22794,6 +22797,7 @@ const init = (state)=>{
         gameStatus: 'IN_PROGRESS',
         modal: '',
         solution,
+        error: '',
         gameMode
     };
 };
@@ -22811,6 +22815,10 @@ const reducer = (state, action)=>{
         ...state
     };
     // console.log(action);
+    if (action.type === 'CLEAR_ERROR') {
+        newState.error = '';
+        return newState;
+    }
     if (action.type === 'TOGGLE_GAME_MODE') // TODO: chiedere all'utente se vuole cambiare il modo di gioco
     newState = init({
         gameMode: state.gameMode === 'random' ? 'daily' : 'random'
@@ -22830,18 +22838,20 @@ const reducer = (state, action)=>{
         }
     }
     if (action.type === 'NEXT_ROW') {
-        console.log(state.gameStatus);
         if (state.gameStatus !== 'IN_PROGRESS') return newState;
         if (state.board[state.currentRow] === 'macio') {
             Snackbar.alert('E se poi te ne penti!!???!');
+            newState.error = 'row';
             return newState;
         }
         if (state.board[state.currentRow].indexOf(' ') > -1) {
             Snackbar.alert('Inserisci tutte le lettere della parola per proseguire');
+            newState.error = 'row';
             return newState;
         }
         if (_possibleWordsJsonDefault.default.indexOf(state.board[state.currentRow]) === -1) {
             Snackbar.alert('La parola inserita non è nella lista delle parole possibili');
+            newState.error = 'row';
             return newState;
         }
         if (state.currentRow < state.board.length - 1) {
@@ -22892,7 +22902,7 @@ const Provider = ({ children  })=>{
         },
         __source: {
             fileName: "client/state.js",
-            lineNumber: 170,
+            lineNumber: 181,
             columnNumber: 9
         },
         __self: undefined,
@@ -23168,6 +23178,8 @@ var _countdownDefault = parcelHelpers.interopDefault(_countdown);
 var _nightmode = require("./Nightmode");
 var _cog = require("./icons/Cog");
 var _cogDefault = parcelHelpers.interopDefault(_cog);
+var _chart = require("./icons/Chart");
+var _chartDefault = parcelHelpers.interopDefault(_chart);
 var _questionMark = require("./icons/QuestionMark");
 var _questionMarkDefault = parcelHelpers.interopDefault(_questionMark);
 var _statContainer = require("./StatContainer");
@@ -23272,7 +23284,7 @@ const App = ()=>{
             /*#__PURE__*/ _jsxRuntime.jsxs("header", {
                 __source: {
                     fileName: "client/App.js",
-                    lineNumber: 125,
+                    lineNumber: 126,
                     columnNumber: 13
                 },
                 __self: undefined,
@@ -23280,34 +23292,68 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("h1", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 126,
+                            lineNumber: 127,
                             columnNumber: 17
                         },
                         __self: undefined,
                         children: "VERBA"
                     }),
-                    /*#__PURE__*/ _jsxRuntime.jsx("div", {
+                    /*#__PURE__*/ _jsxRuntime.jsxs("div", {
                         className: "info",
-                        onClick: ()=>{
-                            dispatch({
-                                type: 'OPEN_MODAL',
-                                modal: 'INFO'
-                            });
-                        },
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 127,
+                            lineNumber: 128,
                             columnNumber: 17
                         },
                         __self: undefined,
-                        children: /*#__PURE__*/ _jsxRuntime.jsx(_questionMarkDefault.default, {
-                            __source: {
-                                fileName: "client/App.js",
-                                lineNumber: 127,
-                                columnNumber: 107
-                            },
-                            __self: undefined
-                        })
+                        children: [
+                            /*#__PURE__*/ _jsxRuntime.jsx("button", {
+                                className: "icon-button",
+                                onClick: ()=>{
+                                    dispatch({
+                                        type: 'OPEN_MODAL',
+                                        modal: 'STATS'
+                                    });
+                                },
+                                __source: {
+                                    fileName: "client/App.js",
+                                    lineNumber: 130,
+                                    columnNumber: 21
+                                },
+                                __self: undefined,
+                                children: /*#__PURE__*/ _jsxRuntime.jsx(_chartDefault.default, {
+                                    __source: {
+                                        fileName: "client/App.js",
+                                        lineNumber: 134,
+                                        columnNumber: 25
+                                    },
+                                    __self: undefined
+                                })
+                            }),
+                            /*#__PURE__*/ _jsxRuntime.jsx("button", {
+                                className: "icon-button",
+                                onClick: ()=>{
+                                    dispatch({
+                                        type: 'OPEN_MODAL',
+                                        modal: 'INFO'
+                                    });
+                                },
+                                __source: {
+                                    fileName: "client/App.js",
+                                    lineNumber: 136,
+                                    columnNumber: 21
+                                },
+                                __self: undefined,
+                                children: /*#__PURE__*/ _jsxRuntime.jsx(_questionMarkDefault.default, {
+                                    __source: {
+                                        fileName: "client/App.js",
+                                        lineNumber: 140,
+                                        columnNumber: 25
+                                    },
+                                    __self: undefined
+                                })
+                            })
+                        ]
                     }),
                     /*#__PURE__*/ _jsxRuntime.jsx("div", {
                         className: "game-mode",
@@ -23318,7 +23364,7 @@ const App = ()=>{
                         },
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 128,
+                            lineNumber: 145,
                             columnNumber: 17
                         },
                         __self: undefined,
@@ -23330,14 +23376,15 @@ const App = ()=>{
                 className: "board",
                 __source: {
                     fileName: "client/App.js",
-                    lineNumber: 130,
+                    lineNumber: 147,
                     columnNumber: 13
                 },
                 __self: undefined,
                 children: state.board.map((word, row)=>/*#__PURE__*/ _jsxRuntime.jsx(_row.Row, {
+                        index: row,
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 131,
+                            lineNumber: 148,
                             columnNumber: 49
                         },
                         __self: undefined,
@@ -23346,7 +23393,7 @@ const App = ()=>{
                                 index: col,
                                 __source: {
                                     fileName: "client/App.js",
-                                    lineNumber: 133,
+                                    lineNumber: 150,
                                     columnNumber: 25
                                 },
                                 __self: undefined,
@@ -23382,25 +23429,25 @@ const App = ()=>{
                 },
                 __source: {
                     fileName: "client/App.js",
-                    lineNumber: 143,
+                    lineNumber: 160,
                     columnNumber: 13
                 },
                 __self: undefined
             }),
             /*#__PURE__*/ _jsxRuntime.jsxs(_modalDefault.default, {
-                open: state.gameStatus === 'WIN' && state.modal === 'STATS',
+                open: state.modal === 'STATS',
                 __source: {
                     fileName: "client/App.js",
-                    lineNumber: 160,
+                    lineNumber: 177,
                     columnNumber: 13
                 },
                 __self: undefined,
                 children: [
-                    /*#__PURE__*/ _jsxRuntime.jsxs("h3", {
+                    state.gameStatus === 'WIN' && /*#__PURE__*/ _jsxRuntime.jsxs("h3", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 161,
-                            columnNumber: 17
+                            lineNumber: 178,
+                            columnNumber: 48
                         },
                         __self: undefined,
                         children: [
@@ -23409,78 +23456,11 @@ const App = ()=>{
                             " tentativi!"
                         ]
                     }),
-                    /*#__PURE__*/ _jsxRuntime.jsx(_statContainerDefault.default, {
+                    state.gameStatus === 'FAIL' && /*#__PURE__*/ _jsxRuntime.jsxs("h3", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 162,
-                            columnNumber: 17
-                        },
-                        __self: undefined
-                    }),
-                    /*#__PURE__*/ _jsxRuntime.jsx(_statGuessesDefault.default, {
-                        __source: {
-                            fileName: "client/App.js",
-                            lineNumber: 163,
-                            columnNumber: 17
-                        },
-                        __self: undefined
-                    }),
-                    state.gameMode === 'random' && /*#__PURE__*/ _jsxRuntime.jsx("button", {
-                        className: "btn",
-                        onClick: ()=>{
-                            dispatch({
-                                type: 'RESET'
-                            });
-                        },
-                        __source: {
-                            fileName: "client/App.js",
-                            lineNumber: 164,
+                            lineNumber: 179,
                             columnNumber: 49
-                        },
-                        __self: undefined,
-                        children: " GIOCA ANCORA "
-                    }),
-                    state.gameMode === 'daily' && /*#__PURE__*/ _jsxRuntime.jsxs(_jsxRuntime.Fragment, {
-                        children: [
-                            /*#__PURE__*/ _jsxRuntime.jsx("button", {
-                                className: "btn share",
-                                onClick: ()=>{
-                                    share(state);
-                                },
-                                __source: {
-                                    fileName: "client/App.js",
-                                    lineNumber: 168,
-                                    columnNumber: 25
-                                },
-                                __self: undefined,
-                                children: "CONDIVIDI"
-                            }),
-                            /*#__PURE__*/ _jsxRuntime.jsx(_countdownDefault.default, {
-                                __source: {
-                                    fileName: "client/App.js",
-                                    lineNumber: 171,
-                                    columnNumber: 25
-                                },
-                                __self: undefined
-                            })
-                        ]
-                    })
-                ]
-            }),
-            /*#__PURE__*/ _jsxRuntime.jsxs(_modalDefault.default, {
-                open: state.gameStatus === 'FAIL' && state.modal === 'STATS',
-                __source: {
-                    fileName: "client/App.js",
-                    lineNumber: 175,
-                    columnNumber: 13
-                },
-                __self: undefined,
-                children: [
-                    /*#__PURE__*/ _jsxRuntime.jsxs("h3", {
-                        __source: {
-                            fileName: "client/App.js",
-                            lineNumber: 176,
-                            columnNumber: 17
                         },
                         __self: undefined,
                         children: [
@@ -23492,7 +23472,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx(_statContainerDefault.default, {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 177,
+                            lineNumber: 181,
                             columnNumber: 17
                         },
                         __self: undefined
@@ -23500,7 +23480,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx(_statGuessesDefault.default, {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 178,
+                            lineNumber: 182,
                             columnNumber: 17
                         },
                         __self: undefined
@@ -23514,13 +23494,13 @@ const App = ()=>{
                         },
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 179,
+                            lineNumber: 183,
                             columnNumber: 49
                         },
                         __self: undefined,
-                        children: "GIOCA ANCORA"
+                        children: " GIOCA ANCORA "
                     }),
-                    state.gameMode === 'daily' && /*#__PURE__*/ _jsxRuntime.jsxs(_jsxRuntime.Fragment, {
+                    state.gameMode === 'daily' && state.gameStatus !== 'IN_PROGRESS' && /*#__PURE__*/ _jsxRuntime.jsxs(_jsxRuntime.Fragment, {
                         children: [
                             /*#__PURE__*/ _jsxRuntime.jsx("button", {
                                 className: "btn share",
@@ -23529,7 +23509,7 @@ const App = ()=>{
                                 },
                                 __source: {
                                     fileName: "client/App.js",
-                                    lineNumber: 182,
+                                    lineNumber: 187,
                                     columnNumber: 25
                                 },
                                 __self: undefined,
@@ -23538,7 +23518,7 @@ const App = ()=>{
                             /*#__PURE__*/ _jsxRuntime.jsx(_countdownDefault.default, {
                                 __source: {
                                     fileName: "client/App.js",
-                                    lineNumber: 185,
+                                    lineNumber: 190,
                                     columnNumber: 25
                                 },
                                 __self: undefined
@@ -23551,7 +23531,7 @@ const App = ()=>{
                 open: state.modal === 'INFO',
                 __source: {
                     fileName: "client/App.js",
-                    lineNumber: 189,
+                    lineNumber: 194,
                     columnNumber: 13
                 },
                 __self: undefined,
@@ -23559,7 +23539,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx(_nightmode.Nightmode, {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 191,
+                            lineNumber: 196,
                             columnNumber: 17
                         },
                         __self: undefined
@@ -23568,7 +23548,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 193,
+                            lineNumber: 198,
                             columnNumber: 51
                         },
                         __self: undefined
@@ -23576,7 +23556,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 193,
+                            lineNumber: 198,
                             columnNumber: 57
                         },
                         __self: undefined
@@ -23585,7 +23565,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 195,
+                            lineNumber: 200,
                             columnNumber: 17
                         },
                         __self: undefined
@@ -23593,7 +23573,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 195,
+                            lineNumber: 200,
                             columnNumber: 23
                         },
                         __self: undefined
@@ -23604,7 +23584,7 @@ const App = ()=>{
                         href: "https://www.powerlanguage.co.uk/wordle/",
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 197,
+                            lineNumber: 202,
                             columnNumber: 17
                         },
                         __self: undefined,
@@ -23614,7 +23594,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 198,
+                            lineNumber: 203,
                             columnNumber: 77
                         },
                         __self: undefined
@@ -23622,7 +23602,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 198,
+                            lineNumber: 203,
                             columnNumber: 82
                         },
                         __self: undefined
@@ -23633,7 +23613,7 @@ const App = ()=>{
                         href: "https://www.twitch.tv/mastornadettofernet",
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 200,
+                            lineNumber: 205,
                             columnNumber: 51
                         },
                         __self: undefined,
@@ -23642,7 +23622,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 201,
+                            lineNumber: 206,
                             columnNumber: 17
                         },
                         __self: undefined
@@ -23650,7 +23630,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 202,
+                            lineNumber: 207,
                             columnNumber: 17
                         },
                         __self: undefined
@@ -23661,7 +23641,7 @@ const App = ()=>{
                         href: "https://www.powerlanguage.co.uk/",
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 203,
+                            lineNumber: 208,
                             columnNumber: 35
                         },
                         __self: undefined,
@@ -23670,7 +23650,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 204,
+                            lineNumber: 209,
                             columnNumber: 17
                         },
                         __self: undefined
@@ -23678,7 +23658,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 205,
+                            lineNumber: 210,
                             columnNumber: 17
                         },
                         __self: undefined
@@ -23689,7 +23669,7 @@ const App = ()=>{
                         href: "https://github.com/napolux/paroleitaliane",
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 206,
+                            lineNumber: 211,
                             columnNumber: 56
                         },
                         __self: undefined,
@@ -23698,7 +23678,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 207,
+                            lineNumber: 212,
                             columnNumber: 17
                         },
                         __self: undefined
@@ -23706,7 +23686,7 @@ const App = ()=>{
                     /*#__PURE__*/ _jsxRuntime.jsx("br", {
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 208,
+                            lineNumber: 213,
                             columnNumber: 17
                         },
                         __self: undefined
@@ -23717,7 +23697,7 @@ const App = ()=>{
                         href: "https://github.com/sebastianomorando/wordle-it",
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 210,
+                            lineNumber: 215,
                             columnNumber: 17
                         },
                         __self: undefined,
@@ -23729,7 +23709,7 @@ const App = ()=>{
                         href: "https://twitter.com/dettofernet",
                         __source: {
                             fileName: "client/App.js",
-                            lineNumber: 211,
+                            lineNumber: 216,
                             columnNumber: 17
                         },
                         __self: undefined,
@@ -23755,7 +23735,7 @@ $RefreshReg$(_c, "App");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"6Ds2u","react":"4mchR","react-simple-keyboard":"blnSY","react-simple-keyboard/build/css/index.css":"mgq3B","./style.css":"jlf4x","./state":"1rbhI","./Tile":"5GDjs","./Row":"eRM8W","./Modal":"brXDP","./utils":"1IC3A","./Countdown":"Bvu7J","./Nightmode":"i3R0I","./icons/Cog":"liOis","./icons/QuestionMark":"gflYJ","./StatContainer":"5ZCgM","./StatGuesses":"2HhvT","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"blnSY":[function(require,module,exports) {
+},{"react/jsx-runtime":"6Ds2u","react":"4mchR","react-simple-keyboard":"blnSY","react-simple-keyboard/build/css/index.css":"mgq3B","./style.css":"jlf4x","./state":"1rbhI","./Tile":"5GDjs","./Row":"eRM8W","./Modal":"brXDP","./utils":"1IC3A","./Countdown":"Bvu7J","./Nightmode":"i3R0I","./icons/Cog":"liOis","./icons/QuestionMark":"gflYJ","./StatContainer":"5ZCgM","./StatGuesses":"2HhvT","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13","./icons/Chart":"lG3kW"}],"blnSY":[function(require,module,exports) {
 /*!
  * 
  *   react-simple-keyboard v3.4.26
@@ -27789,7 +27769,7 @@ $RefreshReg$(_c, "Tile");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"6Ds2u","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13","react":"4mchR"}],"eRM8W":[function(require,module,exports) {
+},{"react/jsx-runtime":"6Ds2u","react":"4mchR","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"eRM8W":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$28ea = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -27801,17 +27781,46 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "Row", ()=>Row
 );
 var _jsxRuntime = require("react/jsx-runtime");
-const Row = ({ children  })=>/*#__PURE__*/ _jsxRuntime.jsx("div", {
-        className: "row",
+var _react = require("react");
+var _state = require("./state");
+var _s = $RefreshSig$();
+const Row = ({ children , index  })=>{
+    _s();
+    const { state , dispatch  } = _state.useStore();
+    const el = _react.useRef(null);
+    const [className1, setClassName] = _react.useState('row');
+    _react.useLayoutEffect(()=>{
+        if (state.currentRow === index && state.error === 'row') {
+            setClassName('row shake');
+            el.current.addEventListener('animationend', ()=>{
+                setClassName((className)=>className.replace(' shake', '')
+                );
+                dispatch({
+                    type: 'CLEAR_ERROR'
+                });
+            });
+        }
+    }, [
+        state.currentRow,
+        state.error
+    ]);
+    return(/*#__PURE__*/ _jsxRuntime.jsx("div", {
+        className: className1,
+        ref: el,
         __source: {
             fileName: "client/Row.js",
-            lineNumber: 1,
-            columnNumber: 38
+            lineNumber: 21,
+            columnNumber: 9
         },
         __self: undefined,
         children: children
-    })
-;
+    }));
+};
+_s(Row, "hkt+ln+BFklQTBkZ9lKwP29r1SY=", false, function() {
+    return [
+        _state.useStore
+    ];
+});
 _c = Row;
 var _c;
 $RefreshReg$(_c, "Row");
@@ -27821,7 +27830,7 @@ $RefreshReg$(_c, "Row");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"6Ds2u","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"brXDP":[function(require,module,exports) {
+},{"react/jsx-runtime":"6Ds2u","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13","./state":"1rbhI","react":"4mchR"}],"brXDP":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$35f0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -28026,6 +28035,7 @@ var _s = $RefreshSig$();
 const Nightmode = ()=>{
     _s();
     const [nightmode, setNightmode] = _react.useState(localStorage.getItem('nightmode') === 'true');
+    const [colorblind, setColorblind] = _react.useState(localStorage.getItem('colorblind') === 'true');
     _react.useEffect(()=>{
         if (nightmode) document.body.classList.add('nightmode');
         else document.body.classList.remove('nightmode');
@@ -28033,69 +28043,141 @@ const Nightmode = ()=>{
     }, [
         nightmode
     ]);
-    return(/*#__PURE__*/ _jsxRuntime.jsxs("div", {
-        className: "menu-voice",
-        __source: {
-            fileName: "client/Nightmode.js",
-            lineNumber: 17,
-            columnNumber: 9
-        },
-        __self: undefined,
+    _react.useEffect(()=>{
+        if (colorblind) document.body.classList.add('colorblind');
+        else document.body.classList.remove('colorblind');
+        localStorage.setItem('colorblind', colorblind);
+    }, [
+        colorblind
+    ]);
+    return(/*#__PURE__*/ _jsxRuntime.jsxs(_jsxRuntime.Fragment, {
         children: [
-            /*#__PURE__*/ _jsxRuntime.jsx("h4", {
+            /*#__PURE__*/ _jsxRuntime.jsxs("div", {
+                className: "menu-voice",
                 __source: {
                     fileName: "client/Nightmode.js",
-                    lineNumber: 18,
-                    columnNumber: 13
-                },
-                __self: undefined,
-                children: "Nightmode"
-            }),
-            /*#__PURE__*/ _jsxRuntime.jsxs("label", {
-                className: "switch-container",
-                __source: {
-                    fileName: "client/Nightmode.js",
-                    lineNumber: 19,
+                    lineNumber: 28,
                     columnNumber: 13
                 },
                 __self: undefined,
                 children: [
-                    /*#__PURE__*/ _jsxRuntime.jsx("input", {
-                        type: "checkbox",
-                        checked: nightmode,
-                        onChange: ()=>{
-                            setNightmode(!nightmode);
-                        },
+                    /*#__PURE__*/ _jsxRuntime.jsx("h4", {
                         __source: {
                             fileName: "client/Nightmode.js",
-                            lineNumber: 20,
-                            columnNumber: 17
-                        },
-                        __self: undefined
-                    }),
-                    /*#__PURE__*/ _jsxRuntime.jsx("div", {
-                        className: "switch",
-                        __source: {
-                            fileName: "client/Nightmode.js",
-                            lineNumber: 27,
+                            lineNumber: 29,
                             columnNumber: 17
                         },
                         __self: undefined,
-                        children: /*#__PURE__*/ _jsxRuntime.jsx("span", {
-                            __source: {
-                                fileName: "client/Nightmode.js",
-                                lineNumber: 28,
-                                columnNumber: 21
-                            },
-                            __self: undefined
-                        })
+                        children: "Nightmode"
+                    }),
+                    /*#__PURE__*/ _jsxRuntime.jsxs("label", {
+                        className: "switch-container",
+                        __source: {
+                            fileName: "client/Nightmode.js",
+                            lineNumber: 30,
+                            columnNumber: 17
+                        },
+                        __self: undefined,
+                        children: [
+                            /*#__PURE__*/ _jsxRuntime.jsx("input", {
+                                type: "checkbox",
+                                checked: nightmode,
+                                onChange: ()=>{
+                                    setNightmode(!nightmode);
+                                },
+                                __source: {
+                                    fileName: "client/Nightmode.js",
+                                    lineNumber: 31,
+                                    columnNumber: 21
+                                },
+                                __self: undefined
+                            }),
+                            /*#__PURE__*/ _jsxRuntime.jsx("div", {
+                                className: "switch",
+                                __source: {
+                                    fileName: "client/Nightmode.js",
+                                    lineNumber: 38,
+                                    columnNumber: 21
+                                },
+                                __self: undefined,
+                                children: /*#__PURE__*/ _jsxRuntime.jsx("span", {
+                                    __source: {
+                                        fileName: "client/Nightmode.js",
+                                        lineNumber: 39,
+                                        columnNumber: 25
+                                    },
+                                    __self: undefined
+                                })
+                            })
+                        ]
+                    })
+                ]
+            }),
+            /*#__PURE__*/ _jsxRuntime.jsxs("div", {
+                className: "menu-voice",
+                __source: {
+                    fileName: "client/Nightmode.js",
+                    lineNumber: 43,
+                    columnNumber: 13
+                },
+                __self: undefined,
+                children: [
+                    /*#__PURE__*/ _jsxRuntime.jsx("h4", {
+                        __source: {
+                            fileName: "client/Nightmode.js",
+                            lineNumber: 44,
+                            columnNumber: 17
+                        },
+                        __self: undefined,
+                        children: "Alto contrasto"
+                    }),
+                    /*#__PURE__*/ _jsxRuntime.jsxs("label", {
+                        className: "switch-container",
+                        __source: {
+                            fileName: "client/Nightmode.js",
+                            lineNumber: 45,
+                            columnNumber: 17
+                        },
+                        __self: undefined,
+                        children: [
+                            /*#__PURE__*/ _jsxRuntime.jsx("input", {
+                                type: "checkbox",
+                                checked: colorblind,
+                                onChange: ()=>{
+                                    setColorblind(!colorblind);
+                                },
+                                __source: {
+                                    fileName: "client/Nightmode.js",
+                                    lineNumber: 46,
+                                    columnNumber: 21
+                                },
+                                __self: undefined
+                            }),
+                            /*#__PURE__*/ _jsxRuntime.jsx("div", {
+                                className: "switch",
+                                __source: {
+                                    fileName: "client/Nightmode.js",
+                                    lineNumber: 53,
+                                    columnNumber: 21
+                                },
+                                __self: undefined,
+                                children: /*#__PURE__*/ _jsxRuntime.jsx("span", {
+                                    __source: {
+                                        fileName: "client/Nightmode.js",
+                                        lineNumber: 54,
+                                        columnNumber: 25
+                                    },
+                                    __self: undefined
+                                })
+                            })
+                        ]
                     })
                 ]
             })
         ]
     }));
 };
-_s(Nightmode, "hnohHqjknl07rfS8Y3vBK4ZcWjA=");
+_s(Nightmode, "g1DiWBuuPxLGHm2asNr+/6Q5nxg=");
 _c = Nightmode;
 var _c;
 $RefreshReg$(_c, "Nightmode");
@@ -28484,7 +28566,54 @@ $RefreshReg$(_c, "StatGuesses");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react/jsx-runtime":"6Ds2u","./stats":"c7ARu","./state":"1rbhI","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"9iTEA":[function(require,module,exports) {
+},{"react/jsx-runtime":"6Ds2u","./stats":"c7ARu","./state":"1rbhI","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"lG3kW":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$a3aa = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$a3aa.prelude(module);
+
+try {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _jsxRuntime = require("react/jsx-runtime");
+const Chart = ()=>/*#__PURE__*/ _jsxRuntime.jsx("svg", {
+        "aria-hidden": "true",
+        focusable: "false",
+        "data-prefix": "fas",
+        "data-icon": "chart-line",
+        className: "svg-inline--fa fa-chart-line fa-w-16",
+        role: "img",
+        xmlns: "http://www.w3.org/2000/svg",
+        viewBox: "0 0 512 512",
+        __source: {
+            fileName: "client/icons/Chart.js",
+            lineNumber: 1,
+            columnNumber: 21
+        },
+        __self: undefined,
+        children: /*#__PURE__*/ _jsxRuntime.jsx("path", {
+            fill: "currentColor",
+            d: "M496 384H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v336c0 17.67 14.33 32 32 32h464c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16zM464 96H345.94c-21.38 0-32.09 25.85-16.97 40.97l32.4 32.4L288 242.75l-73.37-73.37c-12.5-12.5-32.76-12.5-45.25 0l-68.69 68.69c-6.25 6.25-6.25 16.38 0 22.63l22.62 22.62c6.25 6.25 16.38 6.25 22.63 0L192 237.25l73.37 73.37c12.5 12.5 32.76 12.5 45.25 0l96-96 32.4 32.4c15.12 15.12 40.97 4.41 40.97-16.97V112c.01-8.84-7.15-16-15.99-16z",
+            __source: {
+                fileName: "client/icons/Chart.js",
+                lineNumber: 2,
+                columnNumber: 5
+            },
+            __self: undefined
+        })
+    })
+;
+_c = Chart;
+exports.default = Chart;
+var _c;
+$RefreshReg$(_c, "Chart");
+
+  $parcel$ReactRefreshHelpers$a3aa.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react/jsx-runtime":"6Ds2u","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"9pz13"}],"9iTEA":[function(require,module,exports) {
 const SnackbarEl = document.createElement('div');
 SnackbarEl.className = 'snackbar';
 document.body.appendChild(SnackbarEl);

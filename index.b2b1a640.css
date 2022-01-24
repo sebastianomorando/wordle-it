@@ -59,6 +59,11 @@ body.nightmode {
     --tile-border-filled: 2px solid #97979c;
 }
 
+body.colorblind {
+    --present-color: #85c0f9;
+    --correct-color: #f5793a;
+}
+
 /* ANIMATIONS */
 
 @keyframes bounce {
@@ -85,6 +90,30 @@ body.nightmode {
     }
     to {
         transform: rotateX(0deg);
+    }
+}
+
+@keyframes shake {
+    0% {
+        transform: translateX(0);
+    }
+    10% {
+        transform: translateX(-5px);
+    }
+    30% {
+        transform: translateX(5px);
+    }
+    50% {
+        transform: translateX(-5px);
+    }
+    70% {
+        transform: translateX(5px);
+    }
+    90% {
+        transform: translateX(-5px);
+    }
+    100% {
+        transform: translateX(0);
     }
 }
 
@@ -123,8 +152,6 @@ header .info {
     font-weight: 400;
     right: 0;
     top: 10px;
-    color: #999;
-    cursor: pointer;
 }
 
 header .info svg {
@@ -163,6 +190,11 @@ header .game-mode {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-gap: 5px;
+}
+
+.row.shake {
+    animation: shake 0.3s;
+    animation-iteration-count: 1;
 }
 
 .tile {
@@ -464,5 +496,15 @@ header .game-mode {
 .snackbar.show {
     opacity: 1;
     transition: opacity 0.2s;
+}
+
+button.icon-button {
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    color: #999;
+    margin-left: 1rem;
 }
 /*# sourceMappingURL=index.b2b1a640.css.map */
