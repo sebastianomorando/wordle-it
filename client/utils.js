@@ -5,7 +5,7 @@ const dayDifference = (date1, date2) => {
     return Math.floor(diff / (1000 * 60 * 60 * 24));
 };
 
-export const dailyIndex = dayDifference(new Date(2022, 0, 9), new Date());
+export const dailyIndex = dayDifference(new Date(2022, 6, 4), new Date());
 
 export const getSolution = (gameMode) => {
     // possible gameModes = 'random', 'daily'

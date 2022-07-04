@@ -158,7 +158,7 @@ const App = () => {
                 </Row>)}
             </div>
             <Keyboard layout={{
-                    default: ['q e è r t u i o p', 'a à s d f g h j l', '{enter} z x c v b n m {backspace}']
+                    default: ['q w e r t y u i o p', 'a s d f g h j k l', '{enter} z x c v b n m {backspace}']
                 }}
                 display={{
                     '{enter}': 'Invio',

@@ -1,4 +1,4 @@
-const fs = require('fs');
+/* const fs = require('fs');
 const readline = require('readline');
 
 const rl = readline.createInterface({
@@ -23,4 +23,11 @@ rl.on('close', () => {
     words.push('caffè');
     words.push('cesto');
     fs.writeFileSync( 'possibleWords.json', JSON.stringify(words) );
-})
+}) */
+
+import fs from 'fs';
+import { VALID_GUESSES } from './validGuesses.mjs';
+import { WORDS } from './wordlist.mjs';
+WORDS.sort(() => Math.random() - 0.5);
+fs.writeFileSync( 'possibleWords.json', JSON.stringify(VALID_GUESSES) );
+fs.writeFileSync( 'words.json', JSON.stringify(WORDS) );
