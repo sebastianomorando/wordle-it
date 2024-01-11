@@ -17,8 +17,6 @@
         <!-- Twitter Meta Tags -->
         <meta name="twitter:card" content="summary_large_image">
         <meta property="twitter:domain" content="sebastianomorando.github.io">
-        
-        <script defer data-domain="sebastianomorando.github.io/wordle-it" src="https://plausible.io/js/plausible.js"></script>
     </head>
     <body>
         <script>
@@ -41,6 +39,76 @@
         </script>
         <div id="app"></div>
         <div id="modal-root"></div>
+        <script>
+            var tracking_url = 'https://branzino.fabulab.com/track';
+            var client_info = {
+            
+                timeOpened:new Date(),
+                timezone:(new Date()).getTimezoneOffset()/60,
+            
+                get url() {return window.location.href},
+            
+                get pageon(){return window.location.pathname},
+                get referrer(){return document.referrer},
+                get previousSites(){return history.length},
+            
+                get browserName(){return navigator.appName},
+                get browserEngine(){return navigator.product},
+                get browserVersion1a(){return navigator.appVersion},
+                get browserVersion1b(){return navigator.userAgent},
+                get browserLanguage(){return navigator.language},
+                get browserOnline(){return navigator.onLine},
+                get browserPlatform(){return navigator.platform},
+                get javaEnabled(){return navigator.javaEnabled()},
+                get dataCookiesEnabled(){return navigator.cookieEnabled},
+                get dataCookies1(){return document.cookie},
+                get dataCookies2(){return decodeURIComponent(document.cookie.split(";"))},
+                get dataStorage(){return localStorage},
+            
+                get sizeScreenW(){return screen.width},
+                get sizeScreenH(){return screen.height},
+                get sizeDocW(){return document.width},
+                get sizeDocH(){return document.height},
+                get sizeInW(){return innerWidth},
+                get sizeInH(){return innerHeight},
+                get sizeAvailW(){return screen.availWidth},
+                get sizeAvailH(){return screen.availHeight},
+                get scrColorDepth(){return screen.colorDepth},
+                get scrPixelDepth(){return screen.pixelDepth},
+            
+            
+                };
+            
+            var session_id = null;
+                                    
+            function track (event, _data) {
+                const data = _data || null;
+                const payload = {
+                    event: event,
+                    data: data,
+                    client_info,
+                    domain: window.location.hostname,
+                    session: session_id
+                }
+                const xhr = new XMLHttpRequest()
+                xhr.open('POST', tracking_url, true)
+                xhr.setRequestHeader('Content-Type', 'application/json')
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        if (!session_id) {
+                            session_id = xhr.responseText;
+                        }
+                    }
+                }
+                xhr.send(JSON.stringify(payload))
+            }
+            
+            track('pageview', {
+                url: window.location.href,
+                referrer: document.referrer
+            })
+                
+            </script>
         <script type="module" src="client/index.js"></script>
     </body>
 </html>
