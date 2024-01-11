@@ -41,6 +41,7 @@
         <div id="modal-root"></div>
         <script>
             var tracking_url = 'https://branzino.fabulab.com/track';
+            var property_id = '5fd27f02-0c07-4057-b94d-1caf99ff80be';
             var client_info = {
             
                 timeOpened:new Date(),
@@ -88,7 +89,8 @@
                     data: data,
                     client_info,
                     domain: window.location.hostname,
-                    session: session_id
+                    session: session_id,
+                    property_id: property_id
                 }
                 const xhr = new XMLHttpRequest()
                 xhr.open('POST', tracking_url, true)
