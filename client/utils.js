@@ -13,6 +13,6 @@ export const getSolution = (gameMode) => {
         return words[Math.random() * words.length | 0];
     }
     if (gameMode === 'daily') {
-        return words[dailyIndex];
+        return words[dailyIndex % words.length];
     }
 };
