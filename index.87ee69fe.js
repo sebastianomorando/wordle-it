@@ -22944,7 +22944,7 @@ const dailyIndex = dayDifference(new Date(2022, 6, 4), new Date());
 const getSolution = (gameMode)=>{
     // possible gameModes = 'random', 'daily'
     if (gameMode === 'random') return _wordsJsonDefault.default[Math.random() * _wordsJsonDefault.default.length | 0];
-    if (gameMode === 'daily') return _wordsJsonDefault.default[dailyIndex];
+    if (gameMode === 'daily') return _wordsJsonDefault.default[dailyIndex % _wordsJsonDefault.default.length];
 };
 
 },{"../server/words.json":"kq0Xo","@parcel/transformer-js/src/esmodule-helpers.js":"ciiiV"}],"kq0Xo":[function(require,module,exports) {
